@@ -1,0 +1,35 @@
+@import '../../styles/variables.scss';
+.chess-board{
+    width: $board-size;
+    height: $board-size;
+    background: #555;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .chess-container{
+      position: relative;
+  }
+  .chess-index{
+      position: absolute;
+      z-index: 1;
+      list-style: none;
+      li{
+          display: flex;
+          justify-content: center;
+          align-items: center;
+      }
+      &.chess-index__col{
+          display: flex;
+          li{
+              width: calc($board-size / 8);
+          }
+      }
+      &.chess-index__row{
+          left: -10px;
+          display: flex;
+          flex-direction: column-reverse;
+          li{
+              height: calc($board-size / 8);
+          }
+      }
+  }

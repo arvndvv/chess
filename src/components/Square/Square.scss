@@ -1,0 +1,33 @@
+@import '../../styles/variables.scss';
+.square{
+    width: calc($board-size / 8);
+    height: calc($board-size / 8);
+    position: relative;
+    transition: all ease-in-out 0.3s;
+    &--black{
+        background-color: #555;
+    }
+    &--white{
+        background-color: #ddd;
+    }
+}
+.square.active:hover, .square.selected, .square.playable{
+    &::before{
+        content: '';
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        left: 0;
+        top: 0;
+        position: absolute;
+        z-index: 1;
+        background-color: rgba(0, 255, 255, 0.20);
+        box-shadow: 0 0 10px 2px rgb(0, 255, 187);
+    }
+}
+.square.playable{
+    &::before{
+        background-color: rgba(0, 213, 255, 0.585);
+        box-shadow: 0 0 10px 2px rgb(0, 213, 255);
+    }
+}
