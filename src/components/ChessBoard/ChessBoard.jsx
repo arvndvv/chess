@@ -4,16 +4,16 @@ import Square from '../Square/Square';
 
 export default function ChessBoard(props) {
     const [selectedSquare, setSelectedSquare] = useState(-1);
-    const handleSquareSelection = (i) => {
-        if(i === selectedSquare) {
-            setSelectedSquare(-1);
+    const handleSquareSelection = (id) => {
+        if(id === selectedSquare) {
+            setSelectedSquare(null);
         }else{
-            setSelectedSquare(i);
+            setSelectedSquare(id);
         }
     }
     return (
-            <div class="chess-container">
-            <ul class="chess-index chess-index__row" id="rowIndex">
+            <div className="chess-container">
+            <ul className="chess-index chess-index__row" id="rowIndex">
                 <li>1</li>
                 <li>2</li>
                 <li>3</li>
@@ -23,16 +23,20 @@ export default function ChessBoard(props) {
                 <li>7</li>
                 <li>8</li>
             </ul>
-            <div class="chess-board" id="chessBoard">
+            <div className="chess-board" id="chessBoard">
             {
-                Array(64).fill(null).map((_,i)=>{
-                    return (
-                        <Square key={i} i={i} onClick={()=>{handleSquareSelection(i)}} selectedSquare={selectedSquare}/>
-                    )
+                Array(8).fill(null).map((_,row)=>{
+                    return (<div className='row' key={row}>
+                        { Array(8).fill(null).map((_,i)=>{
+                            return (
+                                <Square key={i} i={i} row={row} onClick={(e)=>{handleSquareSelection(e.sid)}} selectedSquare={selectedSquare}/>
+                            );
+                        })}
+                    </div>)
                 })
             }
             </div>
-            <ul class="chess-index chess-index__col" id="colIndex">
+            <ul className="chess-index chess-index__col" id="colIndex">
                 <li>a</li>
                 <li>b</li>
                 <li>c</li>
