@@ -1,14 +1,52 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import './ChessBoard.scss';
 import Square from '../Square/Square';
+import { Chess } from 'chess.js';
 
 export default function ChessBoard(props) {
     const [selectedSquare, setSelectedSquare] = useState(-1);
-    const handleSquareSelection = (id) => {
-        if(id === selectedSquare) {
-            setSelectedSquare(null);
-        }else{
-            setSelectedSquare(id);
+    const [chess, setChess] = useState();
+    const [chessBoard, setChessBoard] = useState([]);
+    const [turn, setTurn] = useState();
+    const [playableSquares, setplayableSquares] = useState([]);
+    useEffect(()=>{
+        setChess(new Chess());
+        window.chess = chess;
+    },[])
+    useEffect(()=>{
+        if(chess){
+            updateChessBoard();
+        }
+    },[chess])
+
+    const updateChessBoard = () => {
+        setChessBoard(chess.board());
+        setTurn(chess.turn());
+    }
+    const handleSquareClick = (e) => {
+        const { action } = e;
+        const id = action.sid;
+        if(action.type === 'select'){
+            if(id === selectedSquare) {
+                setSelectedSquare(null);
+                setplayableSquares([]);
+            }else{
+                setSelectedSquare(id);
+                const playable = chess.moves({square:id}).map(square => square.match(/[a-z][0-9]/i)[0]);
+                console.log('playable::',playable)
+                setplayableSquares(playable);
+            }
+        }
+        if(action.type === 'move'){
+            console.log('yoo',action);
+            try{
+                chess.move(selectedSquare+action.sid);
+                setSelectedSquare(null);
+                setplayableSquares([]);
+            }catch(e){
+                console.log('invalid')
+            }
+            updateChessBoard();
         }
     }
     return (
@@ -25,11 +63,11 @@ export default function ChessBoard(props) {
             </ul>
             <div className="chess-board" id="chessBoard">
             {
-                Array(8).fill(null).map((_,row)=>{
-                    return (<div className='row' key={row}>
-                        { Array(8).fill(null).map((_,i)=>{
+                chessBoard.map((row,rowIndex)=>{
+                    return (<div className='row' key={rowIndex}>
+                        { row.map((col,i)=>{
                             return (
-                                <Square key={i} i={i} row={row} onClick={(e)=>{handleSquareSelection(e.sid)}} selectedSquare={selectedSquare}/>
+                                <Square key={i} i={i} rowIndex={rowIndex} col={col} onClick={handleSquareClick} selectedSquare={selectedSquare} playable={playableSquares} turn={turn}/>
                             );
                         })}
                     </div>)

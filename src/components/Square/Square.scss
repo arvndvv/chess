@@ -1,5 +1,8 @@
 @import '../../styles/variables.scss';
 .square{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: calc($board-size / 8);
     height: calc($board-size / 8);
     position: relative;
@@ -31,3 +34,12 @@
         box-shadow: 0 0 10px 2px rgb(0, 213, 255);
     }
 }
+.square.selected{
+    &::before{
+        border: 1px solid #0af7eb;
+        z-index: 7;
+        // box-shadow: none;
+        left: -1px;
+        top: -1px;
+}
+    }
